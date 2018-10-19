@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TodoList from './TodoList';
+import TodoList from './newTodoList/TodoList';
 import { AppContainer } from 'react-hot-loader';
 // import * as serviceWorker from './serviceWorker';
 

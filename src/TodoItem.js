@@ -7,11 +7,22 @@ class TodoItem extends Component{
     super(props)
     this.handleClick = this.handleClick.bind(this)
   }
+  //一个组件要从父组件接受参数
+  //如果这个组件第一次存在于父组件中，不会执行
+  //如果这个组件之前已经存在于父组件中，才会执行
 
+
+  shouldComponentUpdate(nextProps,nextState){
+    if(nextProps.content !== this.props.content){
+      return true
+    }else{
+      return false
+    }
+  }
   render(){
-    const {content,test} = this.props
+    const {content} = this.props
     return (
-      <div onClick={this.handleClick}>{test}-{content}</div>
+      <div onClick={this.handleClick}>{content}</div>
     )
   }
 
@@ -23,16 +34,11 @@ class TodoItem extends Component{
 }
 
 TodoItem.propTypes = { //设置传值属性类型以及是否必填
-  test:PropTypes.string.isRequired,
   // content:PropTypes.string,
   content:PropTypes.oneOfType([PropTypes.string,PropTypes.number]), //可以是数字或者字符串
   itemDelete:PropTypes.func,
   index:PropTypes.number
 }
 
-TodoItem.defaultProps = { //未传值的默认值
-  test:'hello world'
-
-}
 
 export default TodoItem

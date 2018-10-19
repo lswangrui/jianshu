@@ -1,6 +1,6 @@
 import React, {Component,Fragment} from 'react'
 import TodoItem  from './TodoItem'
-import Test from './Test'
+import axios from 'axios'
 import './style.css'
 
 class TodoList extends Component {
@@ -16,11 +16,48 @@ class TodoList extends Component {
     this.handleBtnClick = this.handleBtnClick.bind(this)
     this.handleItemDelete = this.handleItemDelete.bind(this)
   }
-  handleInputChange(e){
+
+  render() {
+    return (
+      <Fragment>
+        <div>
+          <label htmlFor='insertArea'>输入内容</label>
+          <input
+          id='insertArea'
+          className='input'
+          value={this.state.inputValue}
+          onChange={this.handleInputChange}
+          ref={(input)=>{this.input = input}}
+          />  
+          <input type='button' value='提交'
+          onClick={this.handleBtnClick}
+          />
+        </div>
+        <ul>
+          {this.getTodoItem()}
+        </ul>
+      </Fragment>
+    )
+  }
+
+  componentDidMount(){
+    axios.get('/api/todolist').then(({data})=>{
+      this.setState(()=>{
+        return {
+          list:[...data]
+        }
+      })
+    }).catch((err)=>{
+      alert('err')
+    })  
+  }
+
+  handleInputChange(e){ //尽量少用ref
+    // console.log(this.input.value)
     const value = e.target.value
     this.setState(()=>({ //操作时异步的所以要先保存值在设置
       inputValue:value
-    }))
+    }))  
     // this.setState({
     //   inputValue:e.target.value
     // })
@@ -56,38 +93,14 @@ class TodoList extends Component {
   getTodoItem(){
     return this.state.list.map((item,index)=>{
       return (
-        <div key={item}>
           <TodoItem 
           content={item}
+          key={item}
           index={index}
           itemDelete={this.handleItemDelete}
           />
-        </div>
       )
     })
-  }
-
-  render() {
-    return (
-      <Fragment>
-        <div>
-          <label htmlFor='insertArea'>输入内容</label>
-          <input
-          id='insertArea'
-          className='input'
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          />  
-          <input type='button' value='提交'
-          onClick={this.handleBtnClick}
-          />
-        </div>
-        <ul>
-          {this.getTodoItem()}
-        </ul>
-        <Test content={this.state.inputValue}></Test>
-      </Fragment>
-    )
   }
 }
 
