@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TodoList from './newTodoList/TodoList';
+import TodoList from './secTodoList/TodoList';
 import { AppContainer } from 'react-hot-loader';
+import {Provider} from 'react-redux';
 // import * as serviceWorker from './serviceWorker';
+import store from './secTodoList/store';
+
 
 const root = document.getElementById('root')
 const render = Component => {
   const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate
     renderMethod(
-        <AppContainer>
-            <Component />
-        </AppContainer>,
-        root
+      <AppContainer>
+        <Provider store={store}>
+        {/*组件内部都能获取store*/}
+          <Component />
+        </Provider>
+      </AppContainer>,
+      root
     )
 }
 render(TodoList)
